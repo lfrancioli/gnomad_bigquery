@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#Drop table if exists already
+bq rm -f -t gnomad.exome_transcripts
+#
+##Create empty table
+bq mk --force --schema chrom:string,pos:integer,ref:string,alt:string,transcript_consequences_allele_num:integer,transcript_consequences_amino_acids:string,transcript_consequences_biotype:string,transcript_consequences_canonical:integer,transcript_consequences_ccds:string,transcript_consequences_cdna_start:integer,transcript_consequences_cdna_end:integer,transcript_consequences_cds_end:integer,transcript_consequences_cds_start:integer,transcript_consequences_codons:string,transcript_consequences_consequence_terms:string,transcript_consequences_distance:integer,transcript_consequences_domains:string,transcript_consequences_exon:string,transcript_consequences_gene_id:string,transcript_consequences_gene_pheno:integer,transcript_consequences_gene_symbol:string,transcript_consequences_gene_symbol_source:string,transcript_consequences_hgnc_id:integer,transcript_consequences_hgvsc:string,transcript_consequences_hgvsp:string,transcript_consequences_hgvs_offset:integer,transcript_consequences_impact:string,transcript_consequences_intron:string,transcript_consequences_lof:string,transcript_consequences_lof_flags:string,transcript_consequences_lof_filter:string,transcript_consequences_lof_info:string,transcript_consequences_minimised:integer,transcript_consequences_polyphen_prediction:string,transcript_consequences_polyphen_score:float,transcript_consequences_protein_end:integer,transcript_consequences_protein_start:integer,transcript_consequences_protein_id:string,transcript_consequences_sift_prediction:string,transcript_consequences_sift_score:float,transcript_consequences_strand:integer,transcript_consequences_swissprot:string,transcript_consequences_transcript_id:string,transcript_consequences_trembl:string,transcript_consequences_uniparc:string,transcript_consequences_variant_allele:string,most_severe_consequence:string -t gnomad.exome_transcripts 
+#
+##Load genotypes data
+bq load --source_format=CSV -F "\t" --null_marker=NA --skip_leading_rows 1 gnomad.exome_transcripts gs://gnomad/bigquery/.exomes.transcript_consequences.tsv.gz/part-0*.gz
+bq load --source_format=CSV -F "\t" --null_marker=NA --skip_leading_rows 1 gnomad.exome_transcripts gs://gnomad/bigquery/.exomes.transcript_consequences.tsv.gz/part-1*.gz
+
